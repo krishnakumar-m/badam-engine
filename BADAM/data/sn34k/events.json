@@ -1,0 +1,10 @@
+[
+	{
+	    "id":"steal_dagger",
+	    "defaultMsg":"Get the dagger and get out of here!"
+	},
+	{
+	    "id":"alarm_on",
+	    "defaultMsg":"AN ALARM IS RINGING!!!"
+	}
+]

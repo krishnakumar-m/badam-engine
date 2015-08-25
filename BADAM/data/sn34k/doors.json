@@ -1,0 +1,25 @@
+[
+
+	{
+	    "id":"d_museum_front_door",
+	    "connects":["l_museum_front","l_museum_lobby"],
+	    "status":2,
+	    "title":"Museum front door.",
+	    "key":["lockpick"]
+
+	},
+	{
+	    "id":"d_museum_frmgnd_toldge",
+	    "connects":["l_museum_back_alley","l_museum_bk_fflrldge"],
+	    "status":2,
+	    "key":["grappler"],
+	    "title" : "The back alley and the ledge are at reachable distance if you have the right tool."
+	},
+	{
+	    "id":"d_museum_fflr_wndw",
+	    "connects":["l_museum_bk_fflrldge","l_museum_fflr_landing"],
+	    "status":2,
+	    "title":"The grilled window is having toughglass panes.",
+	    "key":["cutter"]
+	}
+]

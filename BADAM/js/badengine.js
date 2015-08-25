@@ -1,15 +1,36 @@
-var ObjType = {
-	"KEY":1,
-	"PROP":2,
-	"WEAPON":3,
-	"FLAG":4,
-	"CONTAINER":5,
-	"CANNOT_CARRY":6,
-	"LOCK":7
 
-};
 
-turns = 0;
+var turns = 0;
+
+var scene = {};
+
+
+function readGameFile(project,filename) {
+   
+   var req = new XMLHttpRequest();
+   
+  
+    
+    req.onreadystatechange = function() {
+	
+	if (req.readyState == 4 && req.status == 200)
+	{ 
+	  
+	  return  JSON.parse(req.responseText);
+	    
+	}
+	
+    };
+
+    req.open("GET", "../data/" + project + "/" + filename, false);
+    req.send();
+    
+    
+    return req.onreadystatechange();
+   
+}
+
+
 
 // Goes into engine
 
@@ -28,11 +49,11 @@ function getObjById(objArray, id) {
 
 function openDoor(doorName) {
 
-	var door = getObjById(doors, doorName);
+	var door = getObjById(gameworld.doors, doorName);
 
 	for (i = 0;i < door.connects.length;i++)
 	{
-		var scene = getObjById(scenes, door.connects[i]);
+		var scene = getObjById(gameworld.scenes, door.connects[i]);
 
 		var doorIndx = scene.exits.indexOf(doorName);
 
@@ -53,7 +74,7 @@ function openDoor(doorName) {
 }
 
 function getKeys(door) {
-	var doorObj = getObjById(doors, door);
+	var doorObj = getObjById(gameworld.doors, door);
 	if (doorObj != null)
 	{
 		return doorObj.key;
@@ -63,7 +84,7 @@ function getKeys(door) {
 
 function unlock(door, key) {
 
-	var doorObj = getObjById(doors, door);
+	var doorObj = getObjById(gameworld.doors, door);
 	if (typeof(doorObj.key) == "undefined")
 	{
 		console.log("No keys available for door:" + door);
@@ -83,11 +104,11 @@ function getAvailKeys(door) {
 	var keys = getKeys(door);
 
 	var availKeys = new Array();
-	for (var i=0;i < inventory.length;i++)
+	for (var i=0;i < gameworld.inventory.length;i++)
 	{
-		if (keys.indexOf(inventory[i]) > -1)
+		if (keys.indexOf(gameworld.inventory[i]) > -1)
 		{
-			availKeys.push(inventory[i]);
+			availKeys.push(gameworld.inventory[i]);
 		}
 	}
 	return availKeys;
@@ -96,7 +117,7 @@ function getAvailKeys(door) {
 function useKey(door, key) {
 	if (unlock(door, key))
 	{
-	    inventory.splice(inventory.indexOf(key), 1);
+	    gameworld.inventory.splice(gameworld.inventory.indexOf(key), 1);
 		return true;
 	}
 	return false;
@@ -126,28 +147,28 @@ function getEvntObjs(scene) {
 
 
 function addExit(ev) {
-	scene.exits.push(ev);
+	gameworld.scene.exits.push(ev);
 }
 
 
 function addEvent(ev) {
-	evnt.push(ev);
+	gameworld.evnt.push(ev);
 }
 
 function removeEvent(ev) {
-	evnt.splice(evnt.indexOf(ev), 1);
+	gameworld.evnt.splice(gameworld.evnt.indexOf(ev), 1);
 }
 
 function addObjToScene(obj) {
-	scene.objects.push(obj);
+	gameworld.scene.objects.push(obj);
 }
 
 function remObjFromScene(obj) {
-	scene.objects.splice(scene.objects.indexOf(obj), 1);
+	gameworld.scene.objects.splice(gameworld.scene.objects.indexOf(obj), 1);
 }
 
 function selectObject(objName) {
-	var objObj = getObjById(objects, objName);
+	var objObj = getObjById(gameworld.objects, objName);
 	if (objObj == null)
 	{
 		return false;
@@ -164,19 +185,19 @@ function selectObject(objName) {
 	}
 	if (objObj.type.indexOf(ObjType.CANNOT_CARRY) == -1)
 	{
-		inventory.push(objName);
+		gameworld.inventory.push(objName);
 		remObjFromScene(objName);
 	}
 	return true;
 }
 
 function getObjTitle(objName) {
-	var objObj = getObjById(objects, objName);
+	var objObj = getObjById(gameworld.objects, objName);
 	return objObj.title;
 }
 
 function getObjMsg(objName) {
-	var objObj = getObjById(objects, objName);
+	var objObj = getObjById(gameworld.objects, objName);
 	if (typeof(objObj.msg) != "undefined")
 	{
 		return objObj.msg;
@@ -185,7 +206,7 @@ function getObjMsg(objName) {
 }
 
 function combineObjects(objName1, objName2) {
-	var obj1 = getObjById(objects, objName1);
+	var obj1 = getObjById(gameworld.objects, objName1);
 	if (obj1 != null && typeof(obj1.workswith) != "undefined")
 	{
 		var combo = getObjById(obj1.workswith, objName2);
@@ -195,6 +216,8 @@ function combineObjects(objName1, objName2) {
 }
 
 function getHealthLabel() {
+        
+        var health = gameworld.health;
 	
 	if (typeof(health.label) == "undefined") {
 		return "";
@@ -206,3 +229,5 @@ function getHealthLabel() {
 	
 	return health.label[indx-1];
 }
+
+

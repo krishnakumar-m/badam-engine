@@ -3,9 +3,9 @@
 
 function dispInventory() {
 	var inventoryList = "";
-	for (var i=0;i < inventory.length;i++)
+	for (var i=0;i < gameworld.inventory.length;i++)
 	{
-		inventoryList += "<li>" + getObjTitle(inventory[i]) + "</li>";
+		inventoryList += "<li>" + getObjTitle(gameworld.inventory[i]) + "</li>";
 	}
 	document.getElementById("items").innerHTML = "<ul>" + inventoryList + "</ul>";
 
@@ -17,9 +17,9 @@ function dispInventoryAsSelect(objName) {
 	
 	inventoryList += "<option>(select)</option>";
 	
-	for (var i=0;i < inventory.length;i++)
+	for (var i=0;i < gameworld.inventory.length;i++)
 	{
-		inventoryList += "<option value='"+inventory[i]+"'>" + getObjTitle(inventory[i]) + "</option>";
+		inventoryList += "<option value='"+gameworld.inventory[i]+"'>" + getObjTitle(gameworld.inventory[i]) + "</option>";
 	}
 	return inventoryList+"</select>";
 }
@@ -42,13 +42,12 @@ function dispTurns() {
 
 function printObjects() {
 
-	//var objs = getEvntObjs(scene);
-	var objs = getSceneObjs(scene);
+	var objs = getSceneObjs(gameworld.scene);
 	var objectList = " ";
 
 	for (var i=0;i < objs.length;i++)
 	{  
-	    var thisObj = getObjById(objects,objs[i]);
+	    var thisObj = getObjById(gameworld.objects,objs[i]);
 		var thisObjMsg = "<p>"+getObjMsg(objs[i]);
 	
 		if(typeof(thisObj.type) !="undefined" && thisObj.type.indexOf(ObjType.CANNOT_CARRY) == -1) {
@@ -80,7 +79,7 @@ function printKeys(door) {
 
 function refreshExits() {
 
-	var scene = getObjById(scenes, locat);
+	var scene = getObjById(gameworld.scenes, gameworld.locat);
 	var exits = scene.exits;
 
 	var linkText ="";
@@ -88,9 +87,9 @@ function refreshExits() {
 	for (j = 0;j < exits.length;j++)
 
 	{
-		var doorObj = getObjById(doors, exits[j]);
+		var doorObj = getObjById(gameworld.doors, exits[j]);
 
-        if (doorObj != null)
+                if (doorObj != null)
 		{
 
 			if (doorObj.status != 0)
@@ -110,13 +109,13 @@ function refreshExits() {
 		}
 		else
 		{
-			var anotherRoom = getObjById(scenes, exits[j]);
+			var anotherRoom = getObjById(gameworld.scenes, exits[j]);
 
 			if (typeof(anotherRoom) != "undefined")
 			{
 
 				anotherRoomTxt = anotherRoom.title;
-				linkText += "<li><a href=\"javascript:locat='" + exits[j] + "';turns++;scener();\">" + anotherRoomTxt + "</a></li>";
+				linkText += "<li><a href=\"javascript:gameworld.locat='" + exits[j] + "';turns++;scener();\">" + anotherRoomTxt + "</a></li>";
 			}
 		}
 	}
@@ -124,13 +123,13 @@ function refreshExits() {
 }
 
 function currEvntMsg(evnt) {
-	var currEv = getObjById(scene.events, evnt);
+	var currEv = getObjById(gameworld.scene.events, evnt);
 	var evntMsg = "";
 	if (currEv != null)
 	{
 		evntMsg = "<p>"+currEv.msg+"</p>";
 	} else {
-		currEv = getObjById(events,evnt);
+		currEv = getObjById(gameworld.events,evnt);
 		if(currEv != null) {
 			evntMsg = "<p>"+currEv.defaultMsg+"</p>";
 		}
@@ -140,10 +139,10 @@ function currEvntMsg(evnt) {
 
 function refreshEvents() {
 	var evntMsg = "";
-	for (var i=0;i < evnt.length;i++)
+	for (var i=0;i < gameworld.evnt.length;i++)
 	{
-		evntMsg += currEvntMsg(evnt[i]);
-		var objObj = getObjById(scene.events, evnt[i]);
+		evntMsg += currEvntMsg(gameworld.evnt[i]);
+		var objObj = getObjById(gameworld.scene.events, gameworld.evnt[i]);
 
 		if (objObj != null && typeof(objObj.code) != "undefined")
 		{
@@ -160,7 +159,7 @@ function dispHealth() {
 	
 	if (healthText=="")
 	{
-		healthText = "Health : " + health.current + "/" + health.max;
+		healthText = "Health : " + gameworld.health.current + "/" + gameworld.health.max;
 	}
 	
 	document.getElementById("health").innerHTML = healthText;
@@ -171,11 +170,11 @@ function scener() {
 
 	try
 	{
+	        gameworld.init();
+		//gameworld.scene = getObjById(gameworld.scenes, gameworld.locat);
 
-		scene = getObjById(scenes, locat);
-
-		document.getElementById("title").innerHTML = scene.title;  
-		document.getElementById("description").innerHTML = scene.description;  
+		document.getElementById("title").innerHTML = gameworld.scene.title;  
+		document.getElementById("description").innerHTML = gameworld.scene.description;  
 
 		refreshExits();
 		dispInventory();

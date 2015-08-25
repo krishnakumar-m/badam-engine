@@ -1,0 +1,30 @@
+{
+
+	"location" : "l_museum_front",
+
+    	"events" : [
+		"steal_dagger",
+		"burglar_alarm"
+    		],
+
+    	"health" : {
+		"current":100,
+
+		"max":100, 
+
+		"label":[
+	    	"DEAD",
+	    	"CRITICAL",
+	    	"WOUNDED",
+	    	"BRUISED",
+	    	"HEALTHY"
+		]
+    },
+
+    "inventory" : [
+	"grappler",
+	"cutter",
+	"lockpick"
+    ]
+    
+}

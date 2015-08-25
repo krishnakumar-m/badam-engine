@@ -1,42 +1,47 @@
 
-<html><head>
-	<link href="css/styles.css" rel="stylesheet">
-	  
-	<script type="text/javascript" src="js/badengine.js"></script>
-	<script type="text/javascript" src="js/gameworld.js"></script>
-	
-	<script type="text/javascript" src="js/implement.js"></script>
-	<script type="text/javascript" src="js/commands.js"></script>
-	
+<html>
+  <head>
+    <link href="css/styles.css" rel="stylesheet">
+
+   
+
+    <script type="text/javascript" src="js/gameworld.js"></script>
+   
+    <script type="text/javascript" src="js/badengine.js"></script>
+    
+    <script type="text/javascript" src="js/implement.js"></script>
+    <script type="text/javascript" src="js/commands.js"></script>
+    
+ 
 
   </head>
 
-  <body onLoad="scener();">
+  <body onload="gameworld.loadGame();gameworld.init();scener();">
 
 
-	<div id="main">
-	  <div id="left-col">
+    <div id="main">
+      <div id="left-col">
 
-		<div id="title"></div>
-		<div id="content">
-		  <div id="description"></div>
+	<div id="title"></div>
+	<div id="content">
+	  <div id="description"></div>
 
-		  <div id="event"></div>
-		</div>
-		
-		<div id="exits"></div>
-
-	  </div>
-
-	  <div id="right-col">
-		<span>Inventory</span>
-		<div id="items"></div>
-		<div id="turns"></div>
-		<div id="health"></div>
-
-	  </div>
-
+	  <div id="event"></div>
 	</div>
+
+	<div id="exits"></div>
+
+      </div>
+
+      <div id="right-col">
+	<span>Inventory</span>
+	<div id="items"></div>
+	<div id="turns"></div>
+	<div id="health"></div>
+
+      </div>
+
+    </div>
 
   </body>
 

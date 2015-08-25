@@ -1,0 +1,75 @@
+[
+	{
+	    "id":"mus_dagger",
+	    "type":["flag","weapon"],
+	    "title":"Crystal dagger",
+	    "msg":"Sharp and shiny dagger made of crystal. The handle is old. ",
+	    "code":[
+		"START_EVENT stolen_dagger",
+		"STOP_EVENT steal_dagger"
+	    ]
+	},
+	{
+	    "id":"grappler",
+	    "type":["key","weapon"],
+	    "title":"Grapple gun"
+	},
+	{
+	    "id":"cutter",
+	    "type":["key"],
+	    "title":"Glass and Wire Cutter"
+	},
+	{
+	    "id":"lockpick",
+	    "type":["key"],
+	    "title":"Lockpick"
+	},
+	{
+	    "id":"chandelier",
+	    "type":["prop","cannot_carry"],
+	    "title":"A chandelier"
+	},
+	{
+	    "id":"bulb",
+	    "type":[],
+	    "title":"A tiny bulb",
+	    "code":[
+		"ADD_OBJ holder"
+	    ]
+	},
+	{ 
+	    "id":"holder",
+	    "type":["container","cannot_carry"],
+	    "title":"An empty bulb holder",
+	    "workswith":[
+		{
+		    "id":"wire",
+		    "code": ["STOP_EVENT burglar_alarm"
+		    ],
+		    "msg":"Sparks shoot from junction boxes as the wire shorts out the fuse. Lights go out for a few moments. But comes back on as generator kicks in. The security system does not run on backup."
+		}
+	    ]
+	},
+	{ 
+	    "id":"wire",
+	    "type":["flag"],
+	    "title":"A small piece of steel wire",
+	    "msg":"A piece of steel wire is lying on the ground."
+	},
+	{ 
+	    "id":"mus_lock",
+	    "type":["lock","cannot_carry"],
+	    "msg":"A large lock is set into the museum door.",
+	    "workswith":[
+		{
+		    "id":"lockpick",
+		    "code": [
+			"ADD_EXIT d_museum_front_door lockpick"
+		    ],
+		    "msg":"You work on the lock. Some clicks are heard and then there is a big click. VOILA! Door opens"
+		}
+	    ]
+	}
+
+
+]

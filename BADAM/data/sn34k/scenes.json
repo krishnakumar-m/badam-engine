@@ -1,0 +1,141 @@
+[
+
+	{
+
+	    "id": "l_museum_front",
+
+	    "title": "Museum Entrance",
+
+	    "description": "The entrance to the museum which houses the rarest of antiques you can find in the country. ",
+
+	    "events": [
+		{   "id":"steal_dagger",
+		    "msg":"Get inside and steal the dagger."
+		},
+		{   "id":"stolen_dagger",
+		    "msg":"Great! You have stolen the dagger.",
+		    "code":["STOP_EVENT stolen_dagger"]
+		}
+	    ],
+
+
+	    "exits": ["l_museum_back_alley"],
+
+	    "objects": ["bulb","wire","mus_lock"]
+
+	},
+
+	{
+
+	    "id": "l_museum_lobby",
+
+	    "title": "Museum Lobby",
+
+	    "description": "The narrow lobby has a reception desk on one end and a staircase right next to it which leads to the first floor.",
+	    "events": [
+		{"id":"steal_dagger",
+		    "msg":""
+		},
+		{
+		    "id":"burglar_alarm",
+		    "msg":"The burglar alarm goes off. Act fast or the museum security and the cops will get to you!!!",
+		    "code": [
+			"START_EVENT alarm_on",
+			"STOP_EVENT burglar_alarm"
+		    ]
+		}
+	    ],
+
+	    "exits": ["l_museum_stairs","d_museum_front_door"],
+
+	    "objects": []
+
+	},
+
+	{
+
+	    "id": "l_museum_stairs",
+
+	    "title": "Stairs to the First Floor",
+
+	    "description": "The steps are covered in a plush rug of elaborate designs. The hand rails are made of polished wood. A chandelier hangs right above the staircase.",
+
+	    "events": [
+		{"id":"steal_dagger",
+		    "msg":""
+		}
+	    ],
+
+	    "exits": ["l_museum_fflr_landing","l_museum_lobby"],
+
+	    "objects": []
+
+	},
+
+	{
+
+	    "id": "l_museum_fflr_landing",
+
+	    "title": "First floor landing",
+
+	    "description": "The landing has wooden flooring. It is dimly lit, thanks to the spotlights over a few display cases.",
+
+	    "events": [
+		{"id":"steal_dagger",
+		    "msg":"There is an open display case in the middle of the room. There is an old dagger made of crystal resting in red velvet inside the display case."
+		},
+		{"id":"stolen_dagger",
+		    "msg":"One display case in the middle of the room is empty."
+		},
+		{
+		    "id":"burglar_alarm",
+		    "msg":"A deafening alarm sound as you set foot on the floor. This place will be full of guards in no time!!!",
+		    "code": [
+			"START_EVENT alarm_on",
+			"STOP_EVENT burglar_alarm"
+		    ]
+		}
+	    ],
+
+	    "exits": ["l_museum_stairs","d_museum_fflr_wndw"],
+
+	    "objects": ["mus_dagger"]
+
+	},
+
+	{
+
+	    "id": "l_museum_back_alley",
+
+	    "title": "Alley behind the Museum",
+
+	    "description": "Behind the musuem there is a high compound wall with barbwire on top. The narrow space between the building and the wall are allocated as staff parking lots. There is a small balcony in this side of the building with a window which should open to its first floor.",
+
+	    "events": [
+		{"id":"steal_dagger",
+		    "msg":"You need to find out a way to reach the first floor where the dagger is."
+		}
+	    ],
+
+	    "exits": ["l_museum_front","d_museum_frmgnd_toldge"],
+
+	    "objects": []
+
+	},
+
+	{
+
+	    "id": "l_museum_bk_fflrldge",
+
+	    "title": "Balcony, Back window, First floor",
+
+	    "description": "",
+
+	    "events": [],
+
+	    "exits": ["d_museum_frmgnd_toldge","d_museum_fflr_wndw"],
+
+	    "objects": []
+
+	}
+]
