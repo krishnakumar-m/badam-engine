@@ -23,6 +23,15 @@ function execCommand(line) {
 						}
 						addExit(arr[1]);
 			break;
+	        case "ADD_CHAR": for(var i=1;i<arr.length;i++) {
+							addCharToScene(arr[i]);
+						}
+			break;
+		case "REMOVE_CHAR": for(var i=1;i<arr.length;i++) {
+								remCharFromScene(arr[i]);
+							}
+			break;
+	        default: 
 	}
 }
 function runScript(instns) {

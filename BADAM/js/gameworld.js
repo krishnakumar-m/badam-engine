@@ -11,19 +11,15 @@ var ObjType = {
 var gameworld = {
 
 
-   scenes :[],
-
+    scenes :[],
 
     doors : [],
-
 
     objects : [],
 
     events : [],
 
     chars : [],
-
-
 
 // game initial config
 
@@ -34,14 +30,20 @@ var gameworld = {
     health : {},
 
     inventory : [],
+    
     scene :{},
+    
+    gameid : "sn34k",
+    
+    turns : 0,
+    
     loadGame :function() {
-        
 	this.doors = readGameFile(this.gameid, "doors.json");
 	this.scenes = readGameFile(this.gameid, "scenes.json");
 	this.objects = readGameFile(this.gameid, "objects.json");
 	this.events = readGameFile(this.gameid, "events.json");
-        
+	this.chars = readGameFile(this.gameid, "chars.json");
+	
 	var gameConfig = readGameFile(this.gameid, "gameinit.json");
 	this.locat = gameConfig.location;
 	this.evnt = gameConfig.events;
@@ -51,7 +53,23 @@ var gameworld = {
     init : function() {
 	this.scene = getObjById(this.scenes, this.locat);
     },
-    gameid : "sn34k"
+    incTurns : function() {
+	this.turns++;
+    },
+    getHealthLabel : function() {
+	var health = this.health;
+
+        if (typeof(health.label) == "undefined")
+        {
+	    return "";
+        }
+
+        var unitHlth = health.max / health.label.length;
+
+        var indx = Math.ceil(health.current / unitHlth);
+
+        return health.label[indx - 1];
+    }
 
 
 };

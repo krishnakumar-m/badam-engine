@@ -18,7 +18,6 @@
 		}
 	    ],
 
-
 	    "exits": ["l_museum_back_alley"],
 
 	    "objects": ["bulb","wire","mus_lock"]
@@ -41,14 +40,17 @@
 		    "msg":"The burglar alarm goes off. Act fast or the museum security and the cops will get to you!!!",
 		    "code": [
 			"START_EVENT alarm_on",
-			"STOP_EVENT burglar_alarm"
+			"STOP_EVENT burglar_alarm",
+			"ADD_CHAR guard"
 		    ]
 		}
 	    ],
 
 	    "exits": ["l_museum_stairs","d_museum_front_door"],
 
-	    "objects": []
+	    "objects": [],
+	    
+	    "chars":[]
 
 	},
 

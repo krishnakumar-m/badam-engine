@@ -1,0 +1,47 @@
+[
+     {
+		    "id":"guard",
+		    "name":"Museum guard",
+		    "health":100,
+		    "disableExits" : true,
+		    "defaultMsg":"A museum security guard is here.",
+		    "workswith":[
+		                    {
+					"id":"mus_dagger",
+					"msg":"The dagger digs into the guard's chest.",
+					"code":[
+					        "REMOVE_CHAR guard",
+					        "ADD_CHAR dead_guard"
+					        ]
+				    }
+				],
+		    "events":[
+		                {
+				    "id":"fight_back",
+				    "msg":"The guard hits you back.",
+				    "code":["STOP_EVENT fight_back"]
+				}
+			     ],
+	            "actions":[
+		                  {
+				      "id":"punch",
+				      "msg":"You punch the guard on the face.",
+				      "events":[
+				                 {
+				                  "code":[
+				                          "START_EVENT fight_back"
+					                  ]
+					          }
+					       ]
+				  }
+		               ]
+	},
+	{
+		    "id":"dead_guard",
+		    "name":"Dead museum guard",
+		    "health":100,
+		    "disableExits" : false,
+		    "defaultMsg":"The corpse of musuem guard lies sprawled on the floor."
+	}
+    
+]

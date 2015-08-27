@@ -69,6 +69,13 @@
 		    "msg":"You work on the lock. Some clicks are heard and then there is a big click. VOILA! Door opens"
 		}
 	    ]
+	},
+	{
+		"id":"baton",
+	    "type":["weapon"],
+	    "title":"Heavy baton",
+	    "msg":"A piece of steel wire is lying on the ground."
+	
 	}
 
 
