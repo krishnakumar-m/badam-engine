@@ -1,6 +1,10 @@
 BADAM gamebook interpreter / engine/ library 
 Using javascript and JSON (for game data)
 
+
+Version 1.4
+* added NPCs and interaction using actions and objects
+
 Version 1.2
 
 * gameworld.js - all variables and game objects are now part of object gameworld
@@ -19,7 +23,7 @@ implement.js : a sample implementation of web based gamebook
 index.html : the UI, uses implement.js
 
 
-TODO: add NPCs
-TODO: scripted fighting
+TODO: NPC interaction through dialogs
+
 
 
