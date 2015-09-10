@@ -20,7 +20,7 @@
 
 	    "exits": ["l_museum_back_alley"],
 
-	    "objects": ["bulb","wire","mus_lock"]
+	    "objects": ["bulb","mus_lock"]
 
 	},
 
@@ -121,7 +121,7 @@
 
 	    "exits": ["l_museum_front","d_museum_frmgnd_toldge"],
 
-	    "objects": []
+	    "objects": ["wire"]
 
 	},
 

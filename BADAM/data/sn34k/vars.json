@@ -1,0 +1,16 @@
+[
+
+	{
+	"id":"morality",
+	"current":5,
+	"max":10,
+	"min":0,
+	"label":[
+		"Chaotic Evil",
+		"Evil",
+		"Neutral",
+		"Good",
+		"Lawful Good"
+	  	]
+	}
+]

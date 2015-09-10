@@ -1,19 +1,23 @@
-
+var ObjType = {
+    "KEY":"key",
+    "PROP":"prop",
+    "WEAPON":"weapon",
+    "FLAG":"flag",
+    "CONTAINER":"container",
+    "CANNOT_CARRY":"cannot_carry",
+    "LOCK":"lock"
+};
 
 
 function readGameFile(project, filename) {
 
     var req = new XMLHttpRequest();
-    
-    req.onreadystatechange = function() {
 
+    req.onreadystatechange = function() {
 	if (req.readyState == 4 && req.status == 200)
 	{ 
-
 	    return  JSON.parse(req.responseText);
-
 	}
-
     };
 
     req.open("GET", "../data/" + project + "/" + filename, false);
@@ -27,6 +31,7 @@ function readGameFile(project, filename) {
 // Goes into engine
 
 function getObjById(objArray, id) {
+   // alert(" check for "+id);
     for (var i = 0;i < objArray.length;i++)
     {
         if (objArray[i].id == id)
@@ -142,7 +147,7 @@ function addExit(ev) {
 
 
 function addEvent(ev) {
-    
+
     gameworld.evnt.push(ev);
 }
 
@@ -151,10 +156,13 @@ function removeEvent(ev) {
 }
 
 function addObjToScene(obj) {
-    
-    if(typeof(gameworld.scene.objects)== "undefined") {
+
+    if (typeof(gameworld.scene.objects) == "undefined")
+    {
 	gameworld.scene["objects"] = [obj];
-    } else {
+    }
+    else
+    {
         gameworld.scene.objects.push(obj);
     }
 }
@@ -165,26 +173,32 @@ function remObjFromScene(obj) {
 
 function selectObject(objName) {
     var objObj = getObjById(gameworld.objects, objName);
+    var script =[];
+    
     if (objObj == null)
     {
-	return false;
+	return {status:false, code:script};
     }
 
-    if (typeof(objObj.unlockdoor) != "undefined")
+    if (typeof(objObj.events) != "undefined")
     {
-	unlock(objObj.unlockdoor, objName);
+	var eventObj = getObjById(objObj.events, "take");
+	if (eventObj != null && typeof(eventObj.code) != "undefined")
+	{
+
+	    script = objObj.code;
+	}
     }
 
-    if (typeof(objObj.code) != "undefined")
-    {
-	runScript(objObj.code);
-    }
+
     if (objObj.type.indexOf(ObjType.CANNOT_CARRY) == -1)
     {
 	gameworld.inventory.push(objName);
 	remObjFromScene(objName);
+
     }
-    return true;
+
+    return {status:true,code:script};
 }
 
 function getObjTitle(objName) {
@@ -205,8 +219,7 @@ function combineObjects(objName1, objName2) {
     var obj1 = getObjById(gameworld.objects, objName1);
     if (obj1 != null && typeof(obj1.workswith) != "undefined")
     {
-	var combo = getObjById(obj1.workswith, objName2);
-	return combo;
+	return getObjById(obj1.workswith, objName2);
     }
     return null;
 }
@@ -215,17 +228,19 @@ function useObjectOnChar(objName2, char) {
     var obj1 = getObjById(gameworld.chars, char);
     if (obj1 != null && typeof(obj1.workswith) != "undefined")
     {
-	var combo = getObjById(obj1.workswith, objName2);
-	return combo;
+	return getObjById(obj1.workswith, objName2);
     }
     return null;
 }
 
 function addCharToScene(obj) {
-    if(typeof(gameworld.scene.chars)== "undefined") {
+    if (typeof(gameworld.scene.chars) == "undefined")
+    {
 	gameworld.scene["chars"] = [obj];
-    } else {
-    gameworld.scene.chars.push(obj);
+    }
+    else
+    {
+	gameworld.scene.chars.push(obj);
     }
 }
 
@@ -233,3 +248,26 @@ function remCharFromScene(obj) {
     gameworld.scene.chars.splice(gameworld.scene.chars.indexOf(obj), 1);
 }
 
+
+function useActionOnChar(char, action) {
+    var charObj = getObjById(gameworld.chars, char);
+
+    if (charObj != null && typeof(charObj.actions) != "undefined")
+    {
+	return getObjById(charObj.actions, action);
+    }
+
+    return null;
+
+}
+
+function doActionOnObject(obj, action) {
+    var objObj = getObjById(gameworld.objects, obj);
+
+    if (objObj != null && typeof(objObj.actions) != "undefined")
+    {
+	return getObjById(objObj.actions, action);
+    }
+
+    return null;
+}

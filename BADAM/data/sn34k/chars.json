@@ -11,7 +11,8 @@
 					"msg":"The dagger digs into the guard's chest.",
 					"code":[
 					        "REMOVE_CHAR guard",
-					        "ADD_CHAR dead_guard"
+					        "ADD_CHAR dead_guard",
+					        "ADD_OBJ baton"
 					        ]
 				    }
 				],
@@ -26,13 +27,9 @@
 		                  {
 				      "id":"punch",
 				      "msg":"You punch the guard on the face.",
-				      "events":[
-				                 {
-				                  "code":[
-				                          "START_EVENT fight_back"
-					                  ]
-					          }
-					       ]
+				      "code":[
+				               "START_EVENT fight_back"
+					     ]
 				  }
 		               ]
 	},

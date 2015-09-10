@@ -4,10 +4,16 @@
 	    "type":["flag","weapon"],
 	    "title":"Crystal dagger",
 	    "msg":"Sharp and shiny dagger made of crystal. The handle is old. ",
-	    "code":[
-		"START_EVENT stolen_dagger",
-		"STOP_EVENT steal_dagger"
-	    ]
+	    "actions":[ 
+	    		{
+	    		"id":"take",
+	    		"msg":"You take the dagger",
+	    		"code":[
+				"STOP_EVENT steal_dagger",
+				"START_EVENT stolen_dagger"
+	    			]
+	    		}
+	    		]
 	},
 	{
 	    "id":"grappler",
@@ -33,9 +39,16 @@
 	    "id":"bulb",
 	    "type":[],
 	    "title":"A tiny bulb",
-	    "code":[
-		"ADD_OBJ holder"
-	    ]
+	    "actions":[ 
+	    		{
+	    		"id":"take",
+	    		"msg":"You unscrew the bulb from the holder. ",
+	    
+	   		 "code":[
+				"ADD_OBJ holder"
+	    			]
+	    		}
+	    		]
 	},
 	{ 
 	    "id":"holder",
@@ -66,7 +79,7 @@
 		    "code": [
 			"ADD_EXIT d_museum_front_door lockpick"
 		    ],
-		    "msg":"You work on the lock. Some clicks are heard and then there is a big click. VOILA! Door opens"
+		    "msg":"You work on the lock. Some clicks are heard and then there is a big click. VOILA! It is unlocked."
 		}
 	    ]
 	},
@@ -74,7 +87,7 @@
 		"id":"baton",
 	    "type":["weapon"],
 	    "title":"Heavy baton",
-	    "msg":"A piece of steel wire is lying on the ground."
+	    "msg":"The guard's baton is lying on the ground."
 	
 	}
 

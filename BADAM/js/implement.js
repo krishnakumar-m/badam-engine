@@ -1,9 +1,83 @@
 
 
+function selectObjLink(objName) {
+    var behavr =selectObject(objName);
+    if (behavr.status)
+    {
+	scener();
+    }
+}
+
+
+function selectKeyLink(door, key) {
+    if (useKey(door, key))
+    {
+	scener();
+    }
+}
+
+
+function addPara(type, obId, content, destination) {
+    if (document.getElementById(type + "_" + obId))
+    {
+	document.getElementById(type + "_" + obId).innerHTML = content;
+    }
+    else
+    {
+	document.getElementById(destination).innerHTML += "<p id=\"" + type + "_" + obId + "\">" + content + "</p>";
+    }
+}
+
+function dispActions(char) {
+    var actionSelect = "<select onchange=\"applyActionOnChar('" + char + "',this.value);\">";
+    actionSelect +=   "<option value=''>(select)</option>",
+	charObj = getObjById(gameworld.chars, char);
+
+    if (charObj !== null && typeof(charObj) != "undefined")
+    {
+
+	for(var act in charObj.actions) {
+
+	    actionSelect +=   "<option value='" + charObj.actions[act].id + "'>" + charObj.actions[act].id + "</option>";
+
+	}
+    }
+    return actionSelect + "</select>";
+
+}
+
+function dispActionsForObj(obj) {
+    var actionSelect = "<select onchange=\"doActionOnObj('" + obj + "',this.value);\">";
+    actionSelect +=   "<option value=''>(select)</option>";
+    var objObj = getObjById(gameworld.objects, obj);
+
+
+
+    if (objObj !== null && typeof(objObj) != "undefined")
+    {
+	if (typeof(objObj.type) != "undefined" && objObj.type.indexOf(ObjType.CANNOT_CARRY) == -1)
+	{
+	    actionSelect  += "<option value='take'>Take</option>";
+
+	}
+
+	for(var act in objObj.actions) {
+	    if (objObj.actions[act].id != "take")
+	    {
+
+		actionSelect +=   "<option value='" + objObj.actions[act].id + "'>" + objObj.actions[act].id + "</option>";
+	    }
+	}
+    }
+    return actionSelect + "</select>";
+
+}
+
 
 function dispInventory() {
-    var inventoryList = "";
-    for (var i=0;i < gameworld.inventory.length;i++)
+    var inventoryList = "",
+	listSize=gameworld.inventory.length;
+    for (var i=0;i < listSize;i++)
     {
 	inventoryList += "<li>" + getObjTitle(gameworld.inventory[i]) + "</li>";
     }
@@ -12,27 +86,84 @@ function dispInventory() {
     dispTurns();
 }
 
-function dispInventoryAsSelect(objName) {
-    var inventoryList = "<select onchange=\"workOutCombination('" + objName + "',this.value);\">";
+function applyActionOnChar(char, act) {
+    if (act != "")
+    {
+	gameworld.incTurns();
+	dispTurns();
+	var behavr = useActionOnChar(char, act);
+	if (behavr != null)
+	{
 
-    inventoryList += "<option value=''>(select)</option>";
+	    alert(behavr.msg);
+	    if (typeof(behavr.code) != "undefined")
+	    {
+		runScript(behavr.code);
 
-    for (var i=0;i < gameworld.inventory.length;i++)
+		scener();
+	    }
+
+	} 
+    }
+}
+
+
+function doActionOnObj(obj, act) {
+
+    if (act != "")
+    {
+	gameworld.incTurns();
+	dispTurns();
+
+	var behavr = doActionOnObject(obj, act);
+
+	if (behavr != null)
+	{
+            if (act == "take")
+	    {
+		gameworld.inventory.push(obj);
+	        remObjFromScene(obj);
+	    }
+
+	    alert(behavr.msg);
+	    if (typeof(behavr.code) != "undefined")
+	    {
+		runScript(behavr.code);
+
+		scener();
+	    }
+
+	}
+	else
+	{
+	    if (act == "take")
+	    {
+		selectObjLink(obj);
+	    }
+	}
+    }
+}
+
+
+function getItemsAsOptions() {
+    var i, listSize = gameworld.inventory.length,
+	inventoryList = "<option value=''>(select)</option>";
+    for (i = 0;i < listSize;i++)
     {
 	inventoryList += "<option value='" + gameworld.inventory[i] + "'>" + getObjTitle(gameworld.inventory[i]) + "</option>";
     }
+    return inventoryList;
+}
+
+function dispInventoryAsSelect(objName) {
+    var inventoryList = "<select onchange=\"workOutCombination('" + objName + "',this.value);\">";
+    inventoryList +=   getItemsAsOptions();
     return inventoryList + "</select>";
 }
 
-function dispInvOptionsForChar(objName) {
-    var inventoryList = "<select onchange=\"applyItemOnChar(this.value,'" + objName + "');\">";
-
-    inventoryList += "<option value=''>(select)</option>";
-
-    for (var i=0;i < gameworld.inventory.length;i++)
-    {
-	inventoryList += "<option value='" + gameworld.inventory[i] + "'>" + getObjTitle(gameworld.inventory[i]) + "</option>";
-    }
+function dispInvOptionsForChar(charName) {
+    var inventoryList = "<select onchange=\"applyItemOnChar(this.value,'" + charName + "');\">";
+    inventoryList += getItemsAsOptions();
     return inventoryList + "</select>";
 }
 
@@ -40,16 +171,19 @@ function workOutCombination(obj1, obj2) {
     if (obj2 != "")
     {
 	gameworld.incTurns();
+	dispTurns();
 	var behavr = combineObjects(obj1, obj2);
 	if (behavr != null)
 	{
-	    document.getElementById("event").innerHTML += behavr.msg;
+
+	    alert(behavr.msg);
 	    if (typeof(behavr.code) != "undefined")
 	    {
 		runScript(behavr.code);
+
+		scener();
 	    }
-	    refreshExits();
-	    dispTurns();
+
 	}
     }
 }
@@ -58,28 +192,34 @@ function applyItemOnChar(obj, char) {
     if (obj != "")
     {
 	gameworld.incTurns();
+	dispTurns();
 
 	var behavr = useObjectOnChar(obj, char);
 	if (behavr != null)
 	{
-	    document.getElementById("event").innerHTML += behavr.msg;
+
+	    alert(behavr.msg);
 	    if (typeof(behavr.code) != "undefined")
 	    {
 		runScript(behavr.code);
+
+		scener();
 	    }
-	    refreshExits();
-	    dispTurns();
+
 	}
+
     }
-
 }
-
 function dispTurns() {
     document.getElementById("turns").innerHTML = "<b>Turns : " + gameworld.turns + "</b>";
 }
 
+
 function dispChars() {
-    var chars = gameworld.scene.chars, i, j, events=gameworld.evnt,text ="",thisEvent;
+    var chars = gameworld.scene.chars, 
+        i, j, events=gameworld.evnt,
+	text ="",thisEvent;
+
     if (typeof(chars) == "undefined")
     {
 	return;
@@ -88,24 +228,30 @@ function dispChars() {
 
     for (i = 0;i < chars.length;i++)
     {
+	text = "";
 	var charObj = getObjById(gameworld.chars, chars[i]);
 	text += charObj.defaultMsg;
-	for (j = 0;j < events.length;j++)
+	if (charObj != null && typeof(charObj.events) != "undefined")
 	{
-
-	    thisEvent = getObjById(charObj, events[j]);
-	    if (thisEvent != null)
+	    for (j = 0;j < events.length;j++)
 	    {
-		text += "<p>" + thisEvent.msg + "</p>";
-	    }
 
+		thisEvent = getObjById(charObj.events, events[j]);
+		if (thisEvent != null)
+		{
+		    text += "<p>" + thisEvent.msg + "</p>";
+		}
+
+	    }
 	}
 
-	text += " " + dispInvOptionsForChar(chars[i]) + "<br/>";
+	text += " " + dispInvOptionsForChar(chars[i]) + " " + dispActions(chars[i]) + "<br/>";
+
+	addPara("char", chars[i], text, "event");
 
     }
 
-    document.getElementById("event").innerHTML += text;
+
 
 
 }
@@ -113,27 +259,25 @@ function dispChars() {
 function printObjects() {
 
     var objs = getSceneObjs(gameworld.scene);
-    var objectList = " ";
+    var thisObjMsg = " ",thisObj= {};
 
     for (var i=0;i < objs.length;i++)
     {  
-	var thisObj = getObjById(gameworld.objects, objs[i]);
-	var thisObjMsg = "<p>" + getObjMsg(objs[i]);
+	thisObj = getObjById(gameworld.objects, objs[i]);
+	thisObjMsg = getObjMsg(objs[i]);
 
-	if (typeof(thisObj.type) != "undefined" && thisObj.type.indexOf(ObjType.CANNOT_CARRY) == -1)
-	{
-	    thisObjMsg += " <a href=\"javascript:if(selectObject('" + objs[i] + "')){refreshEvents();dispInventory();gameworld.incTurns();dispTurns();}\">" + "Take" + "</a>";
-	}
+	thisObjMsg += " " + dispActionsForObj(objs[i]) ;
 
 	thisObjMsg += " " + dispInventoryAsSelect(objs[i]);
+        addPara("object", objs[i], thisObjMsg, "event");
 
-	thisObjMsg += "</p>";
-
-	objectList += thisObjMsg;
     }
 
-    return " " + objectList + " ";
+
 }
+
+
+
 
 
 function printKeys(door) {
@@ -143,7 +287,7 @@ function printKeys(door) {
     var keyStr = "  ";
     for (var i=0;i < keys.length;i++)
     {
-	keyStr += "Use (<a class=\"key\" href=\"javascript:if(useKey('" + door + "','" + keys[i] + "')){refreshExits();dispInventory();gameworld.incTurns();dispTurns();}\">" + getObjTitle(keys[i]) + "</a>)  ";
+	keyStr += "Use (<a class=\"key\" href=\"javascript:selectKeyLink('" + door + "','" + keys[i] + "');\">" + getObjTitle(keys[i]) + "</a>)  ";
     }
     return keyStr; 
 }
@@ -168,7 +312,7 @@ function refreshExits() {
 		linkText += "<li>" + doorObj.title ;
 		if (doorObj.status == 1)
 		{
-		    linkText += " (Closed) <a href=\"javascript:openDoor('" + exits[j] + "');refreshExits();gameworld.incTurns();dispTurns();\">" + "Open" + "</a>";
+		    linkText += " (Closed) <a href=\"javascript:gameworld.openDoor('" + exits[j] + "');refreshExits();gameworld.incTurns();dispTurns();\">" + "Open" + "</a>";
 		}
 		else if (doorObj.status == 2)
 		{
@@ -195,37 +339,49 @@ function refreshExits() {
 
 function currEvntMsg(evnt) {
     var currEv = getObjById(gameworld.scene.events, evnt);
-    var evntMsg = "";
+
+
     if (currEv != null)
     {
-	evntMsg = "<p>" + currEv.msg + "</p>";
+	return currEv.msg ;
     }
     else
     {
 	currEv = getObjById(gameworld.events, evnt);
 	if (currEv != null)
 	{
-	    evntMsg = "<p>" + currEv.defaultMsg + "</p>";
+	    return currEv.defaultMsg ;
 	}
     }
-    return evntMsg;
+    return "";
 }
 
-function refreshEvents() {
-    var evntMsg = "";
+
+
+function displayEvents() {
+    var evntMsg = "", pnode = null,tnode= null;
     for (var i=0;i < gameworld.evnt.length;i++)
     {
-	evntMsg += currEvntMsg(gameworld.evnt[i]);
-	var objObj = getObjById(gameworld.scene.events, gameworld.evnt[i]);
+	addPara("event", gameworld.evnt[i], currEvntMsg(gameworld.evnt[i]), "event");
+
+    }
+    printObjects();
+
+}
+
+
+function refreshEvents() {
+    var count = 0, objObj ={};
+    while (count < gameworld.evnt.length)
+    {
+	objObj = getObjById(gameworld.scene.events, gameworld.evnt[count]);
 
 	if (objObj != null && typeof(objObj.code) != "undefined")
 	{
 	    runScript(objObj.code);
 	}
-
+	count++;
     }
-    document.getElementById("event").innerHTML = evntMsg + printObjects();
-
 }
 
 function dispHealth() {
@@ -242,23 +398,32 @@ function dispHealth() {
 
 function scener() {
 
-    try
-    {
-	gameworld.init();
-	//gameworld.scene = getObjById(gameworld.scenes, gameworld.locat);
+    /* try
+     {*/
+    gameworld.sceneInit();
+    
+    document.getElementById("event").innerHTML = "";
 
-	document.getElementById("title").innerHTML = gameworld.scene.title;  
-	document.getElementById("description").innerHTML = gameworld.scene.description;  
+    document.getElementById("title").innerHTML = gameworld.scene.title;  
+    document.getElementById("description").innerHTML = gameworld.scene.description;  
 
-	refreshExits();
-	dispInventory();
-	refreshEvents();
-	dispChars();
-	dispHealth();
+    refreshExits();
+    dispInventory();
+    gameworld.refreshEvents();
+    displayEvents();
+    
+    dispChars();
 
-    } catch(e) {
-	alert("Scener exception:" + e.toString());
-    }
+    dispHealth();
+    deleteEvents() ;
+
+    /* } catch(e) {
+     alert("Scener exception:" + e.toString());
+     }*/
 
 }
+
+
+
+
 

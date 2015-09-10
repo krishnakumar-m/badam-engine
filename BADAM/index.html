@@ -11,12 +11,18 @@
     
     <script type="text/javascript" src="js/implement.js"></script>
     <script type="text/javascript" src="js/commands.js"></script>
+    <script type="text/javascript">
+      window.onerror = function (msg, url,line) {
+      
+      alert("ERROR : "+msg+" at line no: "+line+" of "+url);
+      };
+      </script>
     
  
 
   </head>
 
-  <body onload="gameworld.loadGame();gameworld.init();scener();">
+  <body onload="gameworld.loadGame();scener();">
 
 
     <div id="main">
